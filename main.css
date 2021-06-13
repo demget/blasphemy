@@ -1,0 +1,43 @@
+body {
+	margin: 0;
+	overflow: hidden;
+	background-color: #000;
+	color: #fff;
+	font-family: Monospace;
+	font-size: 15px;
+	line-height: 24px;
+	overscroll-behavior: none;
+}
+
+a {
+	color: white;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+button {
+	cursor: pointer;
+	text-transform: uppercase;
+}
+
+#info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding: 10px;
+	/* box-sizing: border-box; */
+	/* text-align: center; */
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	z-index: 1;
+}
+
+a, button, input, select {
+	pointer-events: auto;
+}

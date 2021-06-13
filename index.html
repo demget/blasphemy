@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Blasphemy</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="https://aletheia.icu/~blasphemy" target="_blank" rel="noopener">blog</a>
+			<br>
+			<a href="https://github.com/theblasphemy" target="_blank" rel="noopener">github</a>
+		</div>
+
+		<script type="module">
+			import * as THREE from './three/three.module.js'
+			import { AsciiEffect } from './three/jsm/effects/AsciiEffect.js'
+			import { OrbitControls } from './three/jsm/controls/OrbitControls.js'
+
+			function createCamera() {
+				const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000)
+				camera.position.z = 700
+				return camera
+			}
+
+			function createScene() {
+				const scene = new THREE.Scene()
+				scene.background = new THREE.Color(0, 0, 0)
+				return scene
+			}
+
+			function createRenderer() {
+				const renderer = new THREE.WebGLRenderer()
+				renderer.setSize(window.innerWidth, window.innerHeight)
+				return renderer
+			}
+
+			function createEffect() {
+				const effect = new AsciiEffect(renderer, ' .,:;=+#BLASPHEMY', { invert: true })
+				effect.setSize(window.innerWidth, window.innerHeight)
+				effect.domElement.style.color = 'white'
+				effect.domElement.style.backgroundColor = 'black'
+				return effect
+			}
+
+			function createControls() {
+				const controls = new OrbitControls(camera, effect.domElement)
+				controls.autoRotate = true
+				controls.autoRotateSpeed = 0.2
+				controls.enableZoom = false
+				return controls
+			}
+
+			function addStars(scene) {
+				const radius = 5
+				const layers = [250, 100]
+				const geometries = []
+
+				for (const layer of layers) {
+					const geometry = new THREE.BufferGeometry()
+					const vertices = []
+					const vertex = new THREE.Vector3()
+
+					for (let i = 0; i < layer; i++) {
+						vertex.x = Math.random() * 2 - 1
+						vertex.y = Math.random() * 2 - 1
+						vertex.z = Math.random() * 2 - 1
+						vertex.multiplyScalar(radius)
+						vertices.push(vertex.x, vertex.y, vertex.z)
+					}
+
+					geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
+					geometries.push(geometry)
+				}
+
+				const materials = [
+					new THREE.PointsMaterial({ color: 0x555555, size: 2, sizeAttenuation: false }),
+					new THREE.PointsMaterial({ color: 0x555555, size: 1, sizeAttenuation: false }),
+					new THREE.PointsMaterial({ color: 0x333333, size: 2, sizeAttenuation: false }),
+					new THREE.PointsMaterial({ color: 0x3a3a3a, size: 1, sizeAttenuation: false }),
+					new THREE.PointsMaterial({ color: 0x1a1a1a, size: 2, sizeAttenuation: false }),
+					new THREE.PointsMaterial({ color: 0x1a1a1a, size: 1, sizeAttenuation: false })
+				]
+
+				for (let i = 10; i < 30; i ++) {
+					const stars = new THREE.Points(geometries[i % 2], materials[i % 6])
+
+					stars.rotation.x = Math.random() * 6
+					stars.rotation.y = Math.random() * 6
+					stars.rotation.z = Math.random() * 6
+					stars.scale.setScalar(i * 10)
+					stars.matrixAutoUpdate = false
+					stars.updateMatrix()
+
+					scene.add(stars)
+				}
+			}
+
+			function addLights(scene) {
+				const top = new THREE.PointLight(0xffffff)
+				top.position.set(500, 500, 500)
+				scene.add(top)
+
+				const bottom = new THREE.PointLight(0xffffff, 0.25)
+				bottom.position.set(-500, -500, -500)
+				scene.add(bottom)
+			}
+
+			function addPlanet(scene) {
+				const sphere = new THREE.Mesh(new THREE.SphereGeometry(250, 70, 70), new THREE.MeshPhongMaterial({ flatShading: true }))
+				console.log(sphere.position)
+				scene.add(sphere)
+			}
+
+			const time = Date.now()
+			const camera = createCamera()
+			const scene = createScene()
+			const renderer = createRenderer()
+			const effect = createEffect()
+			const controls = createControls()
+
+			function resize() {
+				camera.aspect = window.innerWidth / window.innerHeight
+				camera.updateProjectionMatrix()
+
+				renderer.setSize(window.innerWidth, window.innerHeight)
+				effect.setSize(window.innerWidth, window.innerHeight)
+			}
+
+			function render() {
+				requestAnimationFrame(render)
+				const delta = Date.now() - time
+
+				controls.update()
+				effect.render(scene, camera)
+			}
+
+			addStars(scene)
+			addLights(scene)
+			addPlanet(scene)
+
+			document.body.appendChild(effect.domElement)
+			window.addEventListener('resize', resize)
+
+			render()
+		</script>
+	</body>
+</html>
