@@ -25,11 +25,10 @@ button {
 
 #info {
 	position: absolute;
+	visibility: collapse;
 	top: 0px;
 	width: 100%;
 	padding: 10px;
-	/* box-sizing: border-box; */
-	/* text-align: center; */
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -40,4 +39,19 @@ button {
 
 a, button, input, select {
 	pointer-events: auto;
+}
+
+#overlay {
+	position: absolute;
+	font-size: 16px;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background: rgba(0,0,0,0.7);
 }

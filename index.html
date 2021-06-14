@@ -8,10 +8,13 @@
 	</head>
 
 	<body>
+		<div id="overlay">
+			<a id="play" href="#">play</a>
+		</div>
 		<div id="info">
-			<a href="https://aletheia.icu/~blasphemy" target="_blank" rel="noopener">blog</a>
+			<a href="https://aletheia.icu/~blasphemy" rel="noopener">blog</a>
 			<br>
-			<a href="https://github.com/theblasphemy" target="_blank" rel="noopener">github</a>
+			<a href="https://github.com/theblasphemy" rel="noopener">github</a>
 		</div>
 
 		<script type="module">
@@ -111,8 +114,19 @@
 
 			function addPlanet(scene) {
 				const sphere = new THREE.Mesh(new THREE.SphereGeometry(250, 70, 70), new THREE.MeshPhongMaterial({ flatShading: true }))
-				console.log(sphere.position)
 				scene.add(sphere)
+			}
+
+			function addAudio(scene) {
+				const listener = new THREE.AudioListener()
+				scene.add(listener)
+
+				const audio = new THREE.Audio(listener)
+				new THREE.AudioLoader().load('bustedblue.m4a', function(buffer) {
+					audio.setBuffer(buffer)
+					audio.setVolume(0.5)
+					audio.play()
+				})
 			}
 
 			const time = Date.now()
@@ -133,7 +147,6 @@
 			function render() {
 				requestAnimationFrame(render)
 				const delta = Date.now() - time
-
 				controls.update()
 				effect.render(scene, camera)
 			}
@@ -145,7 +158,17 @@
 			document.body.appendChild(effect.domElement)
 			window.addEventListener('resize', resize)
 
-			render()
+			const overlay = document.getElementById('overlay')
+			const play = document.getElementById('play')
+			const info = document.getElementById('info')
+
+			play.addEventListener('click', function() {
+				overlay.remove()
+				info.style.visibility = 'visible'
+
+				addAudio(scene)
+				render()
+			})
 		</script>
 	</body>
 </html>
