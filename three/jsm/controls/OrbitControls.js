@@ -1189,9 +1189,9 @@ class OrbitControls extends EventDispatcher {
 		scope.domElement.addEventListener( 'pointerdown', onPointerDown );
 		scope.domElement.addEventListener( 'wheel', onMouseWheel, { passive: false } );
 
-		scope.domElement.addEventListener( 'touchstart', onTouchStart, { passive: false } );
-		scope.domElement.addEventListener( 'touchend', onTouchEnd );
-		scope.domElement.addEventListener( 'touchmove', onTouchMove, { passive: false } );
+		// scope.domElement.addEventListener( 'touchstart', onTouchStart, { passive: false } );
+		// scope.domElement.addEventListener( 'touchend', onTouchEnd );
+		// scope.domElement.addEventListener( 'touchmove', onTouchMove, { passive: false } );
 
 		// force an update at start
 
